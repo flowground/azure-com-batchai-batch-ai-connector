@@ -1,0 +1,113 @@
+{
+    "type": "object",
+    "properties": {
+        "resourceGroupName": {
+            "required": true,
+            "type": "string",
+            "pattern": "^[-\\w\\._]+$"
+        },
+        "workspaceName": {
+            "required": true,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[-\\w_]+$"
+        },
+        "clusterName": {
+            "required": true,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[-\\w_]+$"
+        },
+        "subscriptionId": {
+            "required": true,
+            "type": "string"
+        },
+        "requestBody": {
+            "description": "Cluster update parameters.",
+            "properties": {
+                "properties": {
+                    "description": "The properties of the Cluster.",
+                    "x-ms-client-flatten": true,
+                    "properties": {
+                        "scaleSettings": {
+                            "description": "Desired scale settings for the cluster. Batch AI service supports manual and auto scale clusters.",
+                            "title": "Scale settings.",
+                            "properties": {
+                                "autoScale": {
+                                    "description": "Auto-scale settings for the cluster.",
+                                    "title": "Auto-scale settings.",
+                                    "properties": {
+                                        "initialNodeCount": {
+                                            "default": 0,
+                                            "description": "The number of compute nodes to allocate on cluster creation. Note that this value is used only during cluster creation. Default: 0.",
+                                            "format": "int32",
+                                            "title": "Initial node count.",
+                                            "type": "integer"
+                                        },
+                                        "maximumNodeCount": {
+                                            "description": "The maximum number of compute nodes the cluster can have.",
+                                            "format": "int32",
+                                            "title": "Maximum node count.",
+                                            "type": "integer"
+                                        },
+                                        "minimumNodeCount": {
+                                            "description": "The minimum number of compute nodes the Batch AI service will try to allocate for the cluster. Note, the actual number of nodes can be less than the specified value if the subscription has not enough quota to fulfill the request.",
+                                            "format": "int32",
+                                            "title": "Minimum node count.",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "minimumNodeCount",
+                                        "maximumNodeCount"
+                                    ],
+                                    "type": "object"
+                                },
+                                "manual": {
+                                    "description": "Manual scale settings for the cluster.",
+                                    "title": "Manual scale settings.",
+                                    "properties": {
+                                        "nodeDeallocationOption": {
+                                            "default": "requeue",
+                                            "description": "An action to be performed when the cluster size is decreasing. The default value is requeue.",
+                                            "title": "Node deallocation options.",
+                                            "enum": [
+                                                "requeue",
+                                                "terminate",
+                                                "waitforjobcompletion"
+                                            ],
+                                            "type": "string",
+                                            "x-ms-enum": {
+                                                "modelAsString": true,
+                                                "name": "DeallocationOption"
+                                            }
+                                        },
+                                        "targetNodeCount": {
+                                            "default": 0,
+                                            "description": "The desired number of compute nodes in the Cluster. Default is 0.",
+                                            "format": "int32",
+                                            "title": "Target node count.",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "targetNodeCount"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    }
+                }
+            },
+            "type": "object"
+        },
+        "api_version": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}

@@ -1,0 +1,167 @@
+{
+    "type": "object",
+    "properties": {
+        "resourceGroupName": {
+            "required": true,
+            "type": "string",
+            "pattern": "^[-\\w\\._]+$"
+        },
+        "workspaceName": {
+            "required": true,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[-\\w_]+$"
+        },
+        "fileServerName": {
+            "required": true,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[-\\w_]+$"
+        },
+        "subscriptionId": {
+            "required": true,
+            "type": "string"
+        },
+        "requestBody": {
+            "description": "File Server creation parameters.",
+            "properties": {
+                "properties": {
+                    "description": "The properties of the File Server.",
+                    "x-ms-client-flatten": true,
+                    "properties": {
+                        "dataDisks": {
+                            "description": "Settings for the data disks which will be created for the File Server.",
+                            "title": "Data disks.",
+                            "properties": {
+                                "cachingType": {
+                                    "default": "none",
+                                    "description": "Caching type for the disks. Available values are none (default), readonly, readwrite. Caching type can be set only for VM sizes supporting premium storage.",
+                                    "enum": [
+                                        "none",
+                                        "readonly",
+                                        "readwrite"
+                                    ],
+                                    "title": "Caching type.",
+                                    "type": "string",
+                                    "x-ms-enum": {
+                                        "modelAsString": false,
+                                        "name": "CachingType"
+                                    }
+                                },
+                                "diskCount": {
+                                    "description": "Number of data disks attached to the File Server. If multiple disks attached, they will be configured in RAID level 0.",
+                                    "format": "int32",
+                                    "readOnly": false,
+                                    "title": "Number of data disks.",
+                                    "type": "integer"
+                                },
+                                "diskSizeInGB": {
+                                    "description": "Disk size in GB for the blank data disks.",
+                                    "format": "int32",
+                                    "readOnly": false,
+                                    "title": "Disk size in GB.",
+                                    "type": "integer"
+                                },
+                                "storageAccountType": {
+                                    "description": "Type of storage account to be used on the disk. Possible values are: Standard_LRS or Premium_LRS. Premium storage account type can only be used with VM sizes supporting premium storage.",
+                                    "enum": [
+                                        "Standard_LRS",
+                                        "Premium_LRS"
+                                    ],
+                                    "readOnly": false,
+                                    "title": "Storage account type.",
+                                    "type": "string",
+                                    "x-ms-enum": {
+                                        "modelAsString": true,
+                                        "name": "StorageAccountType"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "diskSizeInGB",
+                                "diskCount",
+                                "storageAccountType"
+                            ],
+                            "type": "object"
+                        },
+                        "sshConfiguration": {
+                            "description": "SSH configuration for the File Server node.",
+                            "title": "SSH configuration.",
+                            "properties": {
+                                "publicIPsToAllow": {
+                                    "description": "List of source IP ranges to allow SSH connection from. The default value is '*' (all source IPs are allowed). Maximum number of IP ranges that can be specified is 400.",
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "title": "Allowed public IPs.",
+                                    "type": "array"
+                                },
+                                "userAccountSettings": {
+                                    "description": "Settings for administrator user account to be created on a node. The account can be used to establish SSH connection to the node.",
+                                    "title": "User account settings.",
+                                    "properties": {
+                                        "adminUserName": {
+                                            "description": "Name of the administrator user account which can be used to SSH to nodes.",
+                                            "title": "User name.",
+                                            "type": "string"
+                                        },
+                                        "adminUserPassword": {
+                                            "description": "Password of the administrator user account.",
+                                            "title": "Password.",
+                                            "type": "string"
+                                        },
+                                        "adminUserSshPublicKey": {
+                                            "description": "SSH public key of the administrator user account.",
+                                            "title": "SSH public key.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "adminUserName"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "required": [
+                                "userAccountSettings"
+                            ],
+                            "type": "object"
+                        },
+                        "subnet": {
+                            "description": "Identifier of an existing virtual network subnet to put the File Server in. If not provided, a new virtual network and subnet will be created.",
+                            "title": "Subnet identifier.",
+                            "properties": {
+                                "id": {
+                                    "description": "The ID of the resource",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "id"
+                            ],
+                            "x-ms-azure-resource": true,
+                            "type": "object"
+                        },
+                        "vmSize": {
+                            "description": "The size of the virtual machine for the File Server. For information about available VM sizes from the Virtual Machines Marketplace, see Sizes for Virtual Machines (Linux).",
+                            "title": "VM size.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "vmSize",
+                        "sshConfiguration",
+                        "dataDisks"
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "api_version": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}

@@ -1,0 +1,649 @@
+{
+    "type": "object",
+    "properties": {
+        "resourceGroupName": {
+            "required": true,
+            "type": "string",
+            "pattern": "^[-\\w\\._]+$"
+        },
+        "workspaceName": {
+            "required": true,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[-\\w_]+$"
+        },
+        "clusterName": {
+            "required": true,
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64,
+            "pattern": "^[-\\w_]+$"
+        },
+        "subscriptionId": {
+            "required": true,
+            "type": "string"
+        },
+        "requestBody": {
+            "description": "Cluster creation operation.",
+            "properties": {
+                "properties": {
+                    "description": "The properties of the Cluster.",
+                    "x-ms-client-flatten": true,
+                    "properties": {
+                        "nodeSetup": {
+                            "description": "Setup to be performed on each compute node in the cluster.",
+                            "title": "Node setup.",
+                            "properties": {
+                                "mountVolumes": {
+                                    "description": "Mount volumes to be available to setup task and all jobs executing on the cluster. The volumes will be mounted at location specified by $AZ_BATCHAI_MOUNT_ROOT environment variable.",
+                                    "title": "Mount volumes.",
+                                    "properties": {
+                                        "azureBlobFileSystems": {
+                                            "description": "A collection of Azure Blob Containers that are to be mounted to the cluster nodes.",
+                                            "items": {
+                                                "description": "Azure Blob Storage Container mounting configuration.",
+                                                "properties": {
+                                                    "accountName": {
+                                                        "description": "Name of the Azure storage account.",
+                                                        "title": "Account name.",
+                                                        "type": "string"
+                                                    },
+                                                    "containerName": {
+                                                        "description": "Name of the Azure Blob Storage container to mount on the cluster.",
+                                                        "title": "Container name.",
+                                                        "type": "string"
+                                                    },
+                                                    "credentials": {
+                                                        "description": "Information about the Azure storage credentials.",
+                                                        "title": "Credentials.",
+                                                        "properties": {
+                                                            "accountKey": {
+                                                                "description": "Storage account key. One of accountKey or accountKeySecretReference must be specified.",
+                                                                "title": "Account key.",
+                                                                "type": "string"
+                                                            },
+                                                            "accountKeySecretReference": {
+                                                                "description": "Information about KeyVault secret storing the storage account key. One of accountKey or accountKeySecretReference must be specified.",
+                                                                "title": "Account key secret reference.",
+                                                                "properties": {
+                                                                    "secretUrl": {
+                                                                        "description": "The URL referencing a secret in the Key Vault.",
+                                                                        "title": "Secret URL.",
+                                                                        "type": "string"
+                                                                    },
+                                                                    "sourceVault": {
+                                                                        "description": "Fully qualified resource identifier of the Key Vault.",
+                                                                        "title": "Key Vault resource identifier.",
+                                                                        "properties": {
+                                                                            "id": {
+                                                                                "description": "The ID of the resource",
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "id"
+                                                                        ],
+                                                                        "x-ms-azure-resource": true,
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "sourceVault",
+                                                                    "secretUrl"
+                                                                ],
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "mountOptions": {
+                                                        "description": "Mount options for mounting blobfuse file system.",
+                                                        "title": "Mount options.",
+                                                        "type": "string"
+                                                    },
+                                                    "relativeMountPath": {
+                                                        "description": "The relative path on the compute node where the Azure File container will be mounted. Note that all cluster level containers will be mounted under $AZ_BATCHAI_MOUNT_ROOT location and all job level containers will be mounted under $AZ_BATCHAI_JOB_MOUNT_ROOT.",
+                                                        "title": "Relative mount path.",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "accountName",
+                                                    "containerName",
+                                                    "credentials",
+                                                    "relativeMountPath"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "title": "Azure Blob file systems.",
+                                            "type": "array"
+                                        },
+                                        "azureFileShares": {
+                                            "description": "A collection of Azure File Shares that are to be mounted to the cluster nodes.",
+                                            "items": {
+                                                "description": "Azure File Share mounting configuration.",
+                                                "properties": {
+                                                    "accountName": {
+                                                        "description": "Name of the Azure storage account.",
+                                                        "title": "Account name.",
+                                                        "type": "string"
+                                                    },
+                                                    "azureFileUrl": {
+                                                        "description": "URL to access the Azure File.",
+                                                        "title": "Azure File URL.",
+                                                        "type": "string"
+                                                    },
+                                                    "credentials": {
+                                                        "description": "Information about the Azure storage credentials.",
+                                                        "title": "Credentials.",
+                                                        "properties": {
+                                                            "accountKey": {
+                                                                "description": "Storage account key. One of accountKey or accountKeySecretReference must be specified.",
+                                                                "title": "Account key.",
+                                                                "type": "string"
+                                                            },
+                                                            "accountKeySecretReference": {
+                                                                "description": "Information about KeyVault secret storing the storage account key. One of accountKey or accountKeySecretReference must be specified.",
+                                                                "title": "Account key secret reference.",
+                                                                "properties": {
+                                                                    "secretUrl": {
+                                                                        "description": "The URL referencing a secret in the Key Vault.",
+                                                                        "title": "Secret URL.",
+                                                                        "type": "string"
+                                                                    },
+                                                                    "sourceVault": {
+                                                                        "description": "Fully qualified resource identifier of the Key Vault.",
+                                                                        "title": "Key Vault resource identifier.",
+                                                                        "properties": {
+                                                                            "id": {
+                                                                                "description": "The ID of the resource",
+                                                                                "type": "string"
+                                                                            }
+                                                                        },
+                                                                        "required": [
+                                                                            "id"
+                                                                        ],
+                                                                        "x-ms-azure-resource": true,
+                                                                        "type": "object"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "sourceVault",
+                                                                    "secretUrl"
+                                                                ],
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "type": "object"
+                                                    },
+                                                    "directoryMode": {
+                                                        "default": "0777",
+                                                        "description": "File mode for directories on the mounted file share. Default value: 0777.",
+                                                        "title": "Directory mode.",
+                                                        "type": "string"
+                                                    },
+                                                    "fileMode": {
+                                                        "default": "0777",
+                                                        "description": "File mode for files on the mounted file share. Default value: 0777.",
+                                                        "title": "File mode.",
+                                                        "type": "string"
+                                                    },
+                                                    "relativeMountPath": {
+                                                        "description": "The relative path on the compute node where the Azure File share will be mounted. Note that all cluster level file shares will be mounted under $AZ_BATCHAI_MOUNT_ROOT location and all job level file shares will be mounted under $AZ_BATCHAI_JOB_MOUNT_ROOT.",
+                                                        "title": "Relative mount path.",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "accountName",
+                                                    "azureFileUrl",
+                                                    "credentials",
+                                                    "relativeMountPath"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "title": "Azure File Shares.",
+                                            "type": "array"
+                                        },
+                                        "fileServers": {
+                                            "description": "A collection of Batch AI File Servers that are to be mounted to the cluster nodes.",
+                                            "items": {
+                                                "description": "File Server mounting configuration.",
+                                                "properties": {
+                                                    "fileServer": {
+                                                        "description": "Resource ID of the existing File Server to be mounted.",
+                                                        "title": "File server.",
+                                                        "properties": {
+                                                            "id": {
+                                                                "description": "The ID of the resource",
+                                                                "type": "string"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "id"
+                                                        ],
+                                                        "x-ms-azure-resource": true,
+                                                        "type": "object"
+                                                    },
+                                                    "mountOptions": {
+                                                        "description": "Mount options to be passed to mount command.",
+                                                        "title": "Mount options.",
+                                                        "type": "string"
+                                                    },
+                                                    "relativeMountPath": {
+                                                        "description": "The relative path on the compute node where the File Server will be mounted. Note that all cluster level file servers will be mounted under $AZ_BATCHAI_MOUNT_ROOT location and all job level file servers will be mounted under $AZ_BATCHAI_JOB_MOUNT_ROOT.",
+                                                        "title": "Relative mount path.",
+                                                        "type": "string"
+                                                    },
+                                                    "sourceDirectory": {
+                                                        "description": "File Server directory that needs to be mounted. If this property is not specified, the entire File Server will be mounted.",
+                                                        "title": "Source directory.",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "fileServer",
+                                                    "relativeMountPath"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "title": "File Servers.",
+                                            "type": "array"
+                                        },
+                                        "unmanagedFileSystems": {
+                                            "description": "A collection of unmanaged file systems that are to be mounted to the cluster nodes.",
+                                            "items": {
+                                                "description": "Unmanaged file system mounting configuration.",
+                                                "properties": {
+                                                    "mountCommand": {
+                                                        "description": "Mount command line. Note, Batch AI will append mount path to the command on its own.",
+                                                        "title": "Mount command.",
+                                                        "type": "string"
+                                                    },
+                                                    "relativeMountPath": {
+                                                        "description": "The relative path on the compute node where the unmanaged file system will be mounted. Note that all cluster level unmanaged file systems will be mounted under $AZ_BATCHAI_MOUNT_ROOT location and all job level unmanaged file systems will be mounted under $AZ_BATCHAI_JOB_MOUNT_ROOT.",
+                                                        "title": "Relative mount path.",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "mountCommand",
+                                                    "relativeMountPath"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "title": "Unmanaged file systems.",
+                                            "type": "array"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "performanceCountersSettings": {
+                                    "description": "Settings for performance counters collecting and uploading.",
+                                    "title": "Performance counters settings.",
+                                    "properties": {
+                                        "appInsightsReference": {
+                                            "description": "Azure Application Insights information for performance counters reporting. If provided, Batch AI will upload node performance counters to the corresponding Azure Application Insights account.",
+                                            "title": "Azure Application Insights reference.",
+                                            "properties": {
+                                                "component": {
+                                                    "description": "Azure Application Insights component resource ID.",
+                                                    "title": "Component ID.",
+                                                    "properties": {
+                                                        "id": {
+                                                            "description": "The ID of the resource",
+                                                            "type": "string"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "id"
+                                                    ],
+                                                    "x-ms-azure-resource": true,
+                                                    "type": "object"
+                                                },
+                                                "instrumentationKey": {
+                                                    "description": "Value of the Azure Application Insights instrumentation key.",
+                                                    "title": "Instrumentation Key.",
+                                                    "type": "string"
+                                                },
+                                                "instrumentationKeySecretReference": {
+                                                    "description": "KeyVault Store and Secret which contains Azure Application Insights instrumentation key. One of instrumentationKey or instrumentationKeySecretReference must be specified.",
+                                                    "title": "Instrumentation key KeyVault Secret reference.",
+                                                    "properties": {
+                                                        "secretUrl": {
+                                                            "description": "The URL referencing a secret in the Key Vault.",
+                                                            "title": "Secret URL.",
+                                                            "type": "string"
+                                                        },
+                                                        "sourceVault": {
+                                                            "description": "Fully qualified resource identifier of the Key Vault.",
+                                                            "title": "Key Vault resource identifier.",
+                                                            "properties": {
+                                                                "id": {
+                                                                    "description": "The ID of the resource",
+                                                                    "type": "string"
+                                                                }
+                                                            },
+                                                            "required": [
+                                                                "id"
+                                                            ],
+                                                            "x-ms-azure-resource": true,
+                                                            "type": "object"
+                                                        }
+                                                    },
+                                                    "required": [
+                                                        "sourceVault",
+                                                        "secretUrl"
+                                                    ],
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "required": [
+                                                "component"
+                                            ],
+                                            "type": "object"
+                                        }
+                                    },
+                                    "required": [
+                                        "appInsightsReference"
+                                    ],
+                                    "type": "object"
+                                },
+                                "setupTask": {
+                                    "description": "Setup task to run on cluster nodes when nodes got created or rebooted. The setup task code needs to be idempotent. Generally the setup task is used to download static data that is required for all jobs that run on the cluster VMs and/or to download/install software.",
+                                    "title": "Setup task.",
+                                    "properties": {
+                                        "commandLine": {
+                                            "description": "The command line to be executed on each cluster's node after it being allocated or rebooted. The command is executed in a bash subshell as a root.",
+                                            "title": "Command line.",
+                                            "type": "string"
+                                        },
+                                        "environmentVariables": {
+                                            "description": "A collection of user defined environment variables to be set for setup task.",
+                                            "items": {
+                                                "description": "An environment variable definition.",
+                                                "properties": {
+                                                    "name": {
+                                                        "description": "The name of the environment variable.",
+                                                        "title": "Name.",
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "description": "The value of the environment variable.",
+                                                        "title": "Value.",
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "name",
+                                                    "value"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "title": "Environment variables.",
+                                            "type": "array"
+                                        },
+                                        "secrets": {
+                                            "description": "A collection of user defined environment variables with secret values to be set for the setup task. Server will never report values of these variables back.",
+                                            "items": {
+                                                "description": "An environment variable with secret value definition.",
+                                                "properties": {
+                                                    "name": {
+                                                        "description": "The name of the environment variable to store the secret value.",
+                                                        "title": "Name.",
+                                                        "type": "string"
+                                                    },
+                                                    "value": {
+                                                        "description": "The value of the environment variable. This value will never be reported back by Batch AI.",
+                                                        "title": "Value.",
+                                                        "type": "string"
+                                                    },
+                                                    "valueSecretReference": {
+                                                        "description": "KeyVault store and secret which contains the value for the environment variable. One of value or valueSecretReference must be provided.",
+                                                        "title": "KeyVault secret reference.",
+                                                        "properties": {
+                                                            "secretUrl": {
+                                                                "description": "The URL referencing a secret in the Key Vault.",
+                                                                "title": "Secret URL.",
+                                                                "type": "string"
+                                                            },
+                                                            "sourceVault": {
+                                                                "description": "Fully qualified resource identifier of the Key Vault.",
+                                                                "title": "Key Vault resource identifier.",
+                                                                "properties": {
+                                                                    "id": {
+                                                                        "description": "The ID of the resource",
+                                                                        "type": "string"
+                                                                    }
+                                                                },
+                                                                "required": [
+                                                                    "id"
+                                                                ],
+                                                                "x-ms-azure-resource": true,
+                                                                "type": "object"
+                                                            }
+                                                        },
+                                                        "required": [
+                                                            "sourceVault",
+                                                            "secretUrl"
+                                                        ],
+                                                        "type": "object"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "name"
+                                                ],
+                                                "type": "object"
+                                            },
+                                            "title": "Secrets.",
+                                            "type": "array"
+                                        },
+                                        "stdOutErrPathPrefix": {
+                                            "description": "The prefix of a path where the Batch AI service will upload the stdout, stderr and execution log of the setup task.",
+                                            "title": "Output path prefix.",
+                                            "type": "string"
+                                        },
+                                        "stdOutErrPathSuffix": {
+                                            "description": "A path segment appended by Batch AI to stdOutErrPathPrefix to form a path where stdout, stderr and execution log of the setup task will be uploaded. Batch AI creates the setup task output directories under an unique path to avoid conflicts between different clusters. The full path can be obtained by concatenation of stdOutErrPathPrefix and stdOutErrPathSuffix.",
+                                            "readOnly": true,
+                                            "title": "Output path suffix.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "commandLine",
+                                        "stdOutErrPathPrefix"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "scaleSettings": {
+                            "description": "Scale settings for the cluster. Batch AI service supports manual and auto scale clusters.",
+                            "title": "Scale settings.",
+                            "properties": {
+                                "autoScale": {
+                                    "description": "Auto-scale settings for the cluster.",
+                                    "title": "Auto-scale settings.",
+                                    "properties": {
+                                        "initialNodeCount": {
+                                            "default": 0,
+                                            "description": "The number of compute nodes to allocate on cluster creation. Note that this value is used only during cluster creation. Default: 0.",
+                                            "format": "int32",
+                                            "title": "Initial node count.",
+                                            "type": "integer"
+                                        },
+                                        "maximumNodeCount": {
+                                            "description": "The maximum number of compute nodes the cluster can have.",
+                                            "format": "int32",
+                                            "title": "Maximum node count.",
+                                            "type": "integer"
+                                        },
+                                        "minimumNodeCount": {
+                                            "description": "The minimum number of compute nodes the Batch AI service will try to allocate for the cluster. Note, the actual number of nodes can be less than the specified value if the subscription has not enough quota to fulfill the request.",
+                                            "format": "int32",
+                                            "title": "Minimum node count.",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "minimumNodeCount",
+                                        "maximumNodeCount"
+                                    ],
+                                    "type": "object"
+                                },
+                                "manual": {
+                                    "description": "Manual scale settings for the cluster.",
+                                    "title": "Manual scale settings.",
+                                    "properties": {
+                                        "nodeDeallocationOption": {
+                                            "default": "requeue",
+                                            "description": "An action to be performed when the cluster size is decreasing. The default value is requeue.",
+                                            "title": "Node deallocation options.",
+                                            "enum": [
+                                                "requeue",
+                                                "terminate",
+                                                "waitforjobcompletion"
+                                            ],
+                                            "type": "string",
+                                            "x-ms-enum": {
+                                                "modelAsString": true,
+                                                "name": "DeallocationOption"
+                                            }
+                                        },
+                                        "targetNodeCount": {
+                                            "default": 0,
+                                            "description": "The desired number of compute nodes in the Cluster. Default is 0.",
+                                            "format": "int32",
+                                            "title": "Target node count.",
+                                            "type": "integer"
+                                        }
+                                    },
+                                    "required": [
+                                        "targetNodeCount"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "subnet": {
+                            "description": "Existing virtual network subnet to put the cluster nodes in. Note, if a File Server mount configured in node setup, the File Server's subnet will be used automatically.",
+                            "title": "Subnet.",
+                            "properties": {
+                                "id": {
+                                    "description": "The ID of the resource",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "id"
+                            ],
+                            "x-ms-azure-resource": true,
+                            "type": "object"
+                        },
+                        "userAccountSettings": {
+                            "description": "Settings for an administrator user account that will be created on each compute node in the cluster.",
+                            "title": "User account settings.",
+                            "properties": {
+                                "adminUserName": {
+                                    "description": "Name of the administrator user account which can be used to SSH to nodes.",
+                                    "title": "User name.",
+                                    "type": "string"
+                                },
+                                "adminUserPassword": {
+                                    "description": "Password of the administrator user account.",
+                                    "title": "Password.",
+                                    "type": "string"
+                                },
+                                "adminUserSshPublicKey": {
+                                    "description": "SSH public key of the administrator user account.",
+                                    "title": "SSH public key.",
+                                    "type": "string"
+                                }
+                            },
+                            "required": [
+                                "adminUserName"
+                            ],
+                            "type": "object"
+                        },
+                        "virtualMachineConfiguration": {
+                            "description": "OS image configuration for cluster nodes. All nodes in a cluster have the same OS image.",
+                            "title": "VM configuration.",
+                            "properties": {
+                                "imageReference": {
+                                    "description": "OS image reference for cluster nodes.",
+                                    "title": "Image reference.",
+                                    "properties": {
+                                        "offer": {
+                                            "description": "Offer of the image.",
+                                            "title": "Offer.",
+                                            "type": "string"
+                                        },
+                                        "publisher": {
+                                            "description": "Publisher of the image.",
+                                            "title": "Publisher.",
+                                            "type": "string"
+                                        },
+                                        "sku": {
+                                            "description": "SKU of the image.",
+                                            "title": "SKU.",
+                                            "type": "string"
+                                        },
+                                        "version": {
+                                            "description": "Version of the image.",
+                                            "title": "Version.",
+                                            "type": "string"
+                                        },
+                                        "virtualMachineImageId": {
+                                            "description": "The ARM resource identifier of the virtual machine image for the compute nodes. This is of the form /subscriptions/{subscriptionId}/resourceGroups/{resourceGroup}/providers/Microsoft.Compute/images/{imageName}. The virtual machine image must be in the same region and subscription as the cluster. For information about the firewall settings for the Batch node agent to communicate with the Batch service see https://docs.microsoft.com/en-us/azure/batch/batch-api-basics#virtual-network-vnet-and-firewall-configuration. Note, you need to provide publisher, offer and sku of the base OS image of which the custom image has been derived from.",
+                                            "title": "Custom VM image resource ID.",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "required": [
+                                        "publisher",
+                                        "offer",
+                                        "sku"
+                                    ],
+                                    "type": "object"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "vmPriority": {
+                            "default": "dedicated",
+                            "description": "VM priority. Allowed values are: dedicated (default) and lowpriority.",
+                            "enum": [
+                                "dedicated",
+                                "lowpriority"
+                            ],
+                            "title": "VM priority.",
+                            "type": "string",
+                            "x-ms-enum": {
+                                "modelAsString": false,
+                                "name": "VmPriority"
+                            }
+                        },
+                        "vmSize": {
+                            "description": "The size of the virtual machines in the cluster. All nodes in a cluster have the same VM size. For information about available VM sizes for clusters using images from the Virtual Machines Marketplace see Sizes for Virtual Machines (Linux). Batch AI service supports all Azure VM sizes except STANDARD_A0 and those with premium storage (STANDARD_GS, STANDARD_DS, and STANDARD_DSV2 series).",
+                            "title": "VM size.",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "vmSize",
+                        "userAccountSettings"
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "api_version": {
+            "required": true,
+            "type": "string"
+        }
+    }
+}
